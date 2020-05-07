@@ -34,14 +34,17 @@ namespace uSync8.Core.Serialization
     public class SyncSerializerOptions
     {
         /// <summary>
-        ///  only add the item if it doesn't already exist
+        ///  Only create the Item if it doesn't already exist
         /// </summary>
         public bool CreateOnly { get; set; }
 
+        /// <summary>
+        ///  standard flags, things like DontSave, FailWhenParent is Missing. 
+        /// </summary>
         public SerializerFlags Flags { get; set; }
 
         /// <summary>
-        ///  parameterized options
+        ///  parameterized options - custom for each handler. 
         /// </summary>
         public IDictionary<string, string> Settings { get; set; }
     }

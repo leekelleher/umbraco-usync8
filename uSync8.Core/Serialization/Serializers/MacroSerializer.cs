@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
+
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
+
 using uSync8.Core.Extensions;
 using uSync8.Core.Models;
 
@@ -25,14 +25,13 @@ namespace uSync8.Core.Serialization.Serializers
             this.macroService = macroService;
         }
 
-        protected override SyncAttempt<IMacro> DeserializeCore(XElement node)
+        protected override SyncAttempt<IMacro> DeserializeCore(XElement node, SyncSerializerOptions options)
         {
             var changes = new List<uSyncChange>();
 
             if (node.Element("Name") == null)
                 throw new ArgumentNullException("XML missing Name parameter");
 
-            var item = default(IMacro);
 
             var key = node.GetKey();
             var alias = node.GetAlias();
@@ -41,18 +40,11 @@ namespace uSync8.Core.Serialization.Serializers
             var macroSource = node.Element("MacroSource").ValueOrDefault(string.Empty);
             var macroType = node.Element("MacroType").ValueOrDefault(MacroTypes.PartialView);
 
-            logger.Debug<MacroSerializer>("Macro by Key [{0}]", key);
-            item = macroService.GetById(key);
-
-            if (item == null)
-            {
-                logger.Debug<MacroSerializer>("Macro by Alias [{0}]", key);
-                item = macroService.GetByAlias(alias);
-            }
-
+            var item = FindItem(node);
             if (item == null)
             {
                 logger.Debug<MacroSerializer>("Creating New [{0}]", key);
+
                 item = new Macro(alias, name, macroSource, macroType);
                 changes.Add(uSyncChange.Create(alias, name, "New Macro"));
             }
@@ -138,7 +130,7 @@ namespace uSync8.Core.Serialization.Serializers
 
         }
 
-        protected override SyncAttempt<XElement> SerializeCore(IMacro item)
+        protected override SyncAttempt<XElement> SerializeCore(IMacro item, SyncSerializerOptions options)
         {
             var node = this.InitializeBaseNode(item, item.Alias);
 

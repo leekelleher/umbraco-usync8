@@ -151,10 +151,13 @@ namespace uSync8.Core.Serialization
         public SyncAttempt<XElement> Serialize(TObject item, SyncSerializerOptions options)
             => SerializeCore(item, options);
 
+#pragma warning disable 0618
         protected virtual SyncAttempt<XElement> SerializeCore(TObject item, SyncSerializerOptions options)
             => SerializeCore(item);
         protected virtual SyncAttempt<TObject> DeserializeCore(XElement node, SyncSerializerOptions options)
             => DeserializeCore(node);
+#pragma warning restore 0618
+
         public virtual SyncAttempt<TObject> DeserializeSecondPass(TObject item, XElement node, SyncSerializerOptions options)
             => SyncAttempt<TObject>.Succeed(nameof(item), item, typeof(TObject), ChangeType.NoChange);
 

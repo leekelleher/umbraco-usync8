@@ -46,7 +46,7 @@ namespace uSync8.ContentEdition.Serializers
 
         #region Serialization
 
-        protected override SyncAttempt<XElement> SerializeCore(IContent item)
+        protected override SyncAttempt<XElement> SerializeCore(IContent item, SyncSerializerOptions options)
         {
             var node = InitializeNode(item, item.ContentType.Alias);
 
@@ -120,7 +120,7 @@ namespace uSync8.ContentEdition.Serializers
 
         #region Deserialization
 
-        protected override SyncAttempt<IContent> DeserializeCore(XElement node)
+        protected override SyncAttempt<IContent> DeserializeCore(XElement node, SyncSerializerOptions options)
         {
          
             var item = FindOrCreate(node);
@@ -163,7 +163,7 @@ namespace uSync8.ContentEdition.Serializers
         }
 
 
-        public override SyncAttempt<IContent> DeserializeSecondPass(IContent item, XElement node, SerializerFlags flags)
+        public override SyncAttempt<IContent> DeserializeSecondPass(IContent item, XElement node, SyncSerializerOptions options)
         {
             var attempt = DeserializeProperties(item, node);
             if (!attempt.Success)

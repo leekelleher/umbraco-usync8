@@ -42,7 +42,7 @@ namespace uSync8.ContentEdition.Serializers
             return info;
         }
 
-        protected override SyncAttempt<IContent> DeserializeCore(XElement node)
+        protected override SyncAttempt<IContent> DeserializeCore(XElement node, SyncSerializerOptions options)
         {
             var item = FindOrCreate(node);
             if (item.Trashed)

@@ -57,7 +57,7 @@ namespace uSync8.ContentEdition.Serializers
 
         }
 
-        protected override SyncAttempt<IMedia> DeserializeCore(XElement node)
+        protected override SyncAttempt<IMedia> DeserializeCore(XElement node, SyncSerializerOptions options)
         {
             var item = FindOrCreate(node);
 
@@ -69,7 +69,7 @@ namespace uSync8.ContentEdition.Serializers
                 item.Name, item, ChangeType.Import, "");
         }
 
-        public override SyncAttempt<IMedia> DeserializeSecondPass(IMedia item, XElement node, SerializerFlags flags)
+        public override SyncAttempt<IMedia> DeserializeSecondPass(IMedia item, XElement node, SyncSerializerOptions options)
         {
             var propertyAttempt = DeserializeProperties(item, node);
             if (!propertyAttempt.Success)
